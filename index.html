@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>PintoGC2A</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 80%;
+            height: 540px;
+            margin: 10px auto;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Covid Deaths Around the World</h1>
+        <h2>cumulative totals</h2>
+    </header>
+
+    <div id='map'></div>
+
+    <footer>
+        <p>Map authored by Jenna Pinto</p>
+        <p>Each circle is representative to each country's Covid deaths. Click the circle to find out the country's name, total amount of Covid deaths, and the number of Covid deaths per 100,000 people. Select layers to see which countries were in which Covid deaths range. </p>
+    </footer>
+
+    <script src="WHO-COVID-19-global-table-data.js"></script>
+    <script>
+
+      var map = L.map('map', {
+          center: [36.54309470992844, -5.328225301458072],
+          zoom: 2,
+      });
+      
+      var tiles = L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
+      });  
+      
+      tiles.addTo(map);
+        
+         
+    //step 2
+      
+    countries.features.sort(function(a, b) {
+   return b.properties.Deaths_cumulative_total - a.properties.Deaths_cumulative_total;
+});
+    
+    //step 1    and then change to step 3 with 'return'
+//       var covidGlobalData = L.geoJson(countries, {
+//           pointToLayer: function(feature,latlng) {
+//               //console.log(feature.properties.Deaths_cumulative_total)
+//               return L.circleMarker(latlng, {
+//                  color: '#64509B',
+//                  weight: 2,
+//                  fillColor: '#BCA9D4',
+//                  fillOpacity: .5,
+//                  radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+//               });   
+//           },
+          
+
+
+//     //step 5
+//     onEachFeature : function(feature,layer) {
+//     layer.on('mouseover', function() {
+//     layer.setStyle({
+//         fillColor: '#418DFA'
+//     });
+// });
+// layer.on('mouseout', function() {
+//     layer.setStyle({
+//         fillColor: '#BCA9D4'
+//     });
+// });
+
+
+          
+//           var name = feature.properties.Name
+//           var deathsTot = feature.properties.Deaths_cumulative_total
+//           var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+//           var popup = ("<b>"+name+"</b><br>"
+//               +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+//                        layer.bindPopup(popup)
+//           }
+          
+          
+//       }).addTo(map);
+
+
+
+  
+
+var deathColorG = L.geoJson(countries,{
+    pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#03AF35',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              });   
+          },
+          filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >= 0 && feature.properties.Deaths_cumulative_total <= 700){
+                  return true
+              };
+          },
+          
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#03AF35'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+
+    
+var deathColorGY = L.geoJson(countries,{
+    pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#BEC802',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              });   
+          },
+          filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >= 701 && feature.properties.Deaths_cumulative_total <= 5000){
+                  return true
+              };
+          },
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#BEC802'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+
+
+         
+var deathColorY = L.geoJson(countries,{
+    pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#BEC802',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              });   
+          },
+    filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >=5001  && feature.properties.Deaths_cumulative_total <= 10000){
+                  return true
+              };
+          },
+          
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#FFC300'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+
+
+
+var deathColorO = L.geoJson(countries,{
+           pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#FF8400',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              });   
+          },filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >= 10001 && feature.properties.Deaths_cumulative_total <= 150000){
+                  return true
+              };
+          },
+          
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#FF8400'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+
+var deathColorR = L.geoJson(countries,{
+    pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#FF0000',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              }); 
+            },
+            filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >= 150001 && feature.properties.Deaths_cumulative_total <= 300000){
+                  return true
+              };
+          },
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#FF0000'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+          
+
+var deathColorPR = L.geoJson(countries,{
+    pointToLayer: function(feature,latlng) {
+              //console.log(feature.properties.Deaths_cumulative_total)
+              return L.circleMarker(latlng, {
+                 color: '#64509B',
+                 weight: 2,
+                 fillColor: '#BCA9D4',
+                 fillOpacity: .5,
+                 radius: getRadius(feature.properties.Deaths_cumulative_total*0.01) //step4
+              });   
+          },
+          filter : function(feature, layer){
+              if(feature.properties.Deaths_cumulative_total >= 300000){
+                  return true
+              };
+          },
+          
+          onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: '#900C3F'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: '#BCA9D4'
+    });
+});
+          var name = feature.properties.Name
+          var deathsTot = feature.properties.Deaths_cumulative_total
+          var deathsPerCap = feature.properties.Deaths_cumulative_total_per_100000_population
+                    
+          
+          var popup = ("<b>"+name+"</b><br>"
+              +"Total Number of Deaths: " +deathsTot+ " people" + "<br>" + "Number of Deaths per 100,000 of the Population: "+deathsPerCap+ " people" + "<br>")
+                       layer.bindPopup(popup)
+          }
+          
+          
+      }).addTo(map);
+
+var sourcesLayers = {"<b style='color:#03AF35 '>Between 0 and 700 Deaths</b>": deathColorG, "<b style='color:#BEC802 '>Between 701 and 5,000 Deaths</b>": deathColorGY, "<b style='color:#FFC300 '>Between 5,001 and 10,000 Deaths</b>": deathColorY,"<b style='color:#FF8400 '>Between 10,001 and 150,000 Deaths</b>": deathColorO,"<b style='color:#FF0000 '>Between 150,000 and 300,000 Deaths</b>": deathColorR,"<b style='color:#900C3F '>Over 300,000 Deaths</b>": deathColorPR }
+
+          L.control.layers(null, sourcesLayers, { collapsed:false }).addTo(map);
+
+
+
+
+//step 4
+        function getRadius(area){
+        var radius = Math.sqrt(area/Math.PI);
+        return radius *.6   
+    }
+          
+    </script>
+    
+</body>
+
+</html>
